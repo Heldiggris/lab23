@@ -6,7 +6,6 @@ Node *create_tree(int v)
 {
     Node *Tree = (Node *)malloc(sizeof(Node));
     Tree->index = v;
-    //обнуляем указатели к братьям и сыновьям, независимая вершина, которая хранит value
     Tree->son = NULL;
     Tree->brother = NULL;
     return Tree;
@@ -61,18 +60,21 @@ void tree_destroy(Node *tree)
     if (tree->brother) {
         tree_destroy(tree->brother);
     }
-    tree = NULL;
     free(tree);
+    tree = NULL;
 }
-
 
 void node_remove(Node *tree, int index)
 {
     if (tree->son) {
         if (tree->son->index == index) {
-
-            tree_destroy(tree->son);
+            Node *tr = tree->son;
             tree->son = tree->son->brother;
+            if (tr->son) {
+                tree_destroy(tr->son);
+            }
+            free(tr);
+            tr = NULL;
             return;
         } else {
             node_remove(tree->son, index);
@@ -80,8 +82,13 @@ void node_remove(Node *tree, int index)
     }
     if (tree->brother) {
         if (tree->brother->index == index) {
-            tree_destroy(tree->brother);
+            Node *tr = tree->brother;
             tree->brother = tree->brother->brother;
+            if (tr->son) {
+                tree_destroy(tr->son);
+            }
+            free(tr);
+            tr = NULL;
             return;
         } else {
             node_remove(tree->brother, index);

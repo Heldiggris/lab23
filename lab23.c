@@ -20,7 +20,6 @@ int main(void)
             scanf("%d", &a);
             node_remove(tree, a);
         } else if (strcmp(what_do, "exit") == 0 || strcmp(what_do, "close") == 0) {
-            tree_destroy(tree);
             break;
         } else if (strcmp(what_do, "result") == 0) {
             int matr[MAX_DEEP] = {0};
@@ -37,10 +36,11 @@ int main(void)
             }
             printf("%d\n", max_ind + 1);
         } else {
+            tree_destroy(tree);
             printf("Error: Invalid query\n");
             exit(1);
         }
     }
-
+    tree_destroy(tree);
     return 0;
 }
