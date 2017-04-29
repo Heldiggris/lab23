@@ -1,3 +1,7 @@
+
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,14 +11,12 @@
 
 bool free_memory = false;
 
-
-
 void fct(int sign)
 {
     printf("123\n");;
 }
 
-void free_memory(int sgn)
+void free_memory_f(int sgn)
 {
     free_memory = true;
 }
@@ -22,10 +24,12 @@ void free_memory(int sgn)
 int main(void)
 {
     Node *tree = NULL;
-    signal(SIGINT, free_memory);
+    signal(SIGINT, free_memory_f);
     while (1) {
         if (free_memory) {
-            tree_destroy(tree);
+            if (tree) {
+                tree_destroy(tree);
+            }
             return 0;
         }
         char what_do[24];
@@ -45,7 +49,9 @@ int main(void)
         } else if (!strcmp(what_do, "remove")) {
             int a;
             scanf("%d", &a);
-            node_remove(tree, a);
+            if (tree) {
+                node_remove(tree, a);
+            }
         } else if (!strcmp(what_do, "exit") || !strcmp(what_do, "close") || !strcmp(what_do, "quit")) {
             break;
         } else if (!strcmp(what_do, "result")) {

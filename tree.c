@@ -35,19 +35,21 @@ Node *node_find(Node *tree, int index)
 
 void node_add(Node *tree, int parent, int index)
 {
-    Node *parent_node = node_find(tree, parent);
-    if (parent_node != NULL) {
-        if (parent_node->son == NULL) {
-            parent_node->son = create_tree(index);
-        } else {
-            Node *brother = parent_node->son;
-            while (brother->brother) {
-                brother = brother->brother;
+    if (tree) {
+        Node *parent_node = node_find(tree, parent);
+        if (parent_node) {
+            if (parent_node->son == NULL) {
+                parent_node->son = create_tree(index);
+            } else {
+                Node *brother = parent_node->son;
+                while (brother->brother) {
+                    brother = brother->brother;
+                }
+                brother->brother = create_tree(index);
             }
-            brother->brother = create_tree(index);
+        } else {
+            printf("Error: you can't add node\n");
         }
-    } else {
-        printf("Error: you can't add node\n");
     }
 }
 
@@ -98,15 +100,17 @@ void node_remove(Node *tree, int index)
 
 void tree_draw(Node *tree, int num)
 {
-    for (int i = 0; i < num; i++) {
-        printf("\t");
-    }
-    printf("%d\n", tree->index);
-    if (tree->son) {
-        tree_draw(tree->son, num + 1);
-    }
-    if (tree->brother) {
-        tree_draw(tree->brother, num);
+    if (tree) {
+        for (int i = 0; i < num; i++) {
+            printf("\t");
+        }
+        printf("%d\n", tree->index);
+        if (tree->son) {
+            tree_draw(tree->son, num + 1);
+        }
+        if (tree->brother) {
+            tree_draw(tree->brother, num);
+        }
     }
 }
 
